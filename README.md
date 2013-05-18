@@ -1,0 +1,4 @@
+StargazerMC
+===========
+
+Stargazer Minecraft mods
