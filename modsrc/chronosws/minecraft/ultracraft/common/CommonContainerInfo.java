@@ -1,10 +1,13 @@
-package chronosws.minecraft.ultracraft;
+package chronosws.minecraft.ultracraft.common;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.tileentity.TileEntity;
+import chronosws.minecraft.ultracraft.client.CommonGuiContainer;
 
-public class CommonGuiSlotMap
+public class CommonContainerInfo
 {  
   public enum SlotType
   {
@@ -35,7 +38,7 @@ public class CommonGuiSlotMap
     }
   }
   
-  private String backgroundTexture;  
+  private String backgroundTexture; 
   private List<SlotInfo> mapping;
   private int guiWidth;
   private int guiHeight;
@@ -43,7 +46,7 @@ public class CommonGuiSlotMap
   private int invXOffset;
   private int invYOffset;
   
-  public CommonGuiSlotMap(String backgroundTexture, int width, int height, int invXOffset, int invYOffset)
+  public CommonContainerInfo(String backgroundTexture, int width, int height, int invXOffset, int invYOffset)
   {
     this.mapping = new ArrayList<SlotInfo>();
     this.backgroundTexture = backgroundTexture;
@@ -71,6 +74,18 @@ public class CommonGuiSlotMap
   public int getInvYOffset()
   {
     return this.invYOffset;
+  }
+  
+  // Override to get a different container
+  public CommonContainer getContainerInstance(InventoryPlayer invPlayer, TileEntity tileEntity)
+  {
+    return new CommonContainer(invPlayer, tileEntity, this);
+  }
+  
+  // Override to get a different gui container
+  public CommonGuiContainer getGuiContainerInstance(CommonContainer container)
+  {
+    return new CommonGuiContainer(container);
   }
   
   public String getBackgroundTexture()

@@ -1,7 +1,8 @@
-package chronosws.minecraft.ultracraft;
+package chronosws.minecraft.ultracraft.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import chronosws.minecraft.ultracraft.Ultracraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -12,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 //
 // A TileEntity which implements IInventory
 //
-public class TileEntityWithInventory extends TileEntity implements IInventory
+public class CommonTileEntityWithInventory extends TileEntity implements IInventory
 {
   public final static String ENTITY_ID = "CommonEntity";
   
@@ -20,18 +21,18 @@ public class TileEntityWithInventory extends TileEntity implements IInventory
   private String name;
   private String guiId;
   
-  public TileEntityWithInventory()
+  public CommonTileEntityWithInventory()
   {  
   }
   
-  public TileEntityWithInventory(String invName, String guiId)
+  public CommonTileEntityWithInventory(String invName, String guiId)
   {        
     this.name = invName;
     this.guiId = guiId;
-    this.inv = new ItemStack[getSlotMap().size()];
+    this.inv = new ItemStack[getGuiInfo().size()];
   }
   
-  public CommonGuiSlotMap getSlotMap()
+  public CommonContainerInfo getGuiInfo()
   {
     return Ultracraft.guis.get(guiId);
   }
@@ -143,7 +144,7 @@ public class TileEntityWithInventory extends TileEntity implements IInventory
     super.readFromNBT(tagCompound);
 
     this.guiId = tagCompound.getString(TAG_GUIID);
-    this.inv = new ItemStack[getSlotMap().size()];
+    this.inv = new ItemStack[getGuiInfo().size()];
     
     NBTTagList tagList = tagCompound.getTagList(TAG_INVENTORY);
     for (int i = 0; i < tagList.tagCount(); i++)

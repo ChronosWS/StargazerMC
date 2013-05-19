@@ -1,4 +1,4 @@
-package chronosws.minecraft.ultracraft;
+package chronosws.minecraft.ultracraft.common;
 
 public class CommonProxy
 {

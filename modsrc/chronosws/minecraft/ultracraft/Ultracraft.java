@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
+import chronosws.minecraft.ultracraft.client.CommonGuiContainer;
+import chronosws.minecraft.ultracraft.common.CommonGuiHandler;
+import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
+import chronosws.minecraft.ultracraft.common.CommonProxy;
+import chronosws.minecraft.ultracraft.common.CommonTileEntityWithInventory;
 import chronosws.minecraft.ultracraft.utilities.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -54,7 +59,7 @@ public class Ultracraft
   public static Logger logger;
 
   // Gui 
-  public static Map<String, CommonGuiSlotMap> guis;
+  public static Map<String, CommonContainerInfo> guis = new HashMap<String, CommonContainerInfo>();
   
   //
   // Mod entry points
@@ -136,27 +141,28 @@ public class Ultracraft
   
   private void initTileEntities()
   {    
-    GameRegistry.registerTileEntity(TileEntityWithInventory.class, TileEntityWithInventory.ENTITY_ID);
+    GameRegistry.registerTileEntity(CommonTileEntityWithInventory.class, CommonTileEntityWithInventory.ENTITY_ID);
   }
   
   private void initGuis()
   {  
     // 
     // Define textures and slot positions
-    //
-    CommonGuiSlotMap slotMap = new CommonGuiSlotMap("/mods/Ultracraft/textures/gui/container.png", 
+    // TODO: Tie this in more closely with the block declarations so we can 
+    //       get the container impls.
+    CommonContainerInfo guiInfo = new CommonContainerInfo(
+        "/mods/Ultracraft/textures/gui/container.png", 
         176, 222, 
         8, 140);
     for (int i = 0; i < 6; i++)
     {
       for (int j = 0; j < 9; j++)
       {
-        slotMap.addSlot(8 + j * 18, 18 + i * 18);
+        guiInfo.addSlot(8 + j * 18, 18 + i * 18);
       }
     }
 
-    this.guis = new HashMap<String, CommonGuiSlotMap>();
-    this.guis.put("UltraCraftingTableGui", slotMap);
+    this.guis.put("UltraCraftingTableGui", guiInfo);
     
     //
     // Register any special handlers

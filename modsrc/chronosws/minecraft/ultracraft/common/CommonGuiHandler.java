@@ -1,12 +1,15 @@
-package chronosws.minecraft.ultracraft;
+package chronosws.minecraft.ultracraft.common;
 
-import chronosws.minecraft.ultracraft.client.UltraCraftingTableGui;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import chronosws.minecraft.ultracraft.client.CommonGuiContainer;
 import cpw.mods.fml.common.network.IGuiHandler;
 
+
+//
+// CommonGuiHandler - This class is responsible for handling network events related
+//                    to Guis, such as for containers.
 public class CommonGuiHandler implements IGuiHandler
 {
   @Override
@@ -29,14 +32,14 @@ public class CommonGuiHandler implements IGuiHandler
     TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
     if(tileEntity != null)
     {
-      if(tileEntity instanceof TileEntityWithInventory)
+      if(tileEntity instanceof CommonTileEntityWithInventory)
       {
-        TileEntityWithInventory invEntity = (TileEntityWithInventory)tileEntity;
-        CommonGuiContainer container = new CommonGuiContainer(player.inventory, invEntity, invEntity.getSlotMap());
+        CommonTileEntityWithInventory invEntity = (CommonTileEntityWithInventory)tileEntity;       
+        CommonContainer container = invEntity.getGuiInfo().getContainerInstance(player.inventory, invEntity);
         
         if(client)
         {
-          return new UltraCraftingTableGui(container);
+          return invEntity.getGuiInfo().getGuiContainerInstance(container);
         }
         
         return container;

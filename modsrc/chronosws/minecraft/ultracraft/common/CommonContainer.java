@@ -1,6 +1,7 @@
-package chronosws.minecraft.ultracraft;
+package chronosws.minecraft.ultracraft.common;
 
-import chronosws.minecraft.ultracraft.CommonGuiSlotMap.SlotInfo;
+import chronosws.minecraft.ultracraft.Constants;
+import chronosws.minecraft.ultracraft.common.CommonContainerInfo.SlotInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -9,63 +10,53 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class CommonGuiContainer extends Container
+public class CommonContainer extends Container
 {
   private TileEntity containerEntity;  
   private IInventory containerInventory;
   private String backgroundTexture;
-  private CommonGuiSlotMap slotMap;
+  private CommonContainerInfo guiInfo;
   private int playerHotBarFirst;
   private int playerInventoryFirst;
   
-  public CommonGuiContainer(
+  public CommonContainer(
       InventoryPlayer playerInv, 
       TileEntity te, 
-      CommonGuiSlotMap slotMap)
+      CommonContainerInfo guiInfo)
   {
     this.containerEntity = te;
     this.containerInventory = (IInventory) this.containerEntity;
-    this.slotMap = slotMap;
+    this.guiInfo = guiInfo;
     
     bindInventories(playerInv);
   }
 
-  public int getWidth()
+  public CommonContainerInfo getGuiInfo()
   {
-    return this.slotMap.getGuiWidth();
+    return this.guiInfo;
   }
-  
-  public int getHeight()
-  {
-    return this.slotMap.getGuiHeight();
-  }
-  
-  public String getBackgroundTexture()
-  {
-    return this.slotMap.getBackgroundTexture();
-  }
-  
+    
   private void bindInventories(InventoryPlayer playerInv)
   {
     //
     // Bind container inventory
     //
-    for (int i = 0; i < slotMap.size(); i++)
+    for (int i = 0; i < guiInfo.size(); i++)
     {
-      SlotInfo slotInfo = slotMap.get(i);
+      SlotInfo slotInfo = guiInfo.get(i);
       addSlotToContainer(new Slot(this.containerInventory, i,
           slotInfo.getXOffset(), slotInfo.getYOffset()));
     }
 
-    this.playerHotBarFirst = slotMap.size();
+    this.playerHotBarFirst = guiInfo.size();
     
     //
     // Player hotbar
     //
     for (int i = 0; i < Constants.PLAYER_HOTBAR_COUNT; i++)
     {
-      int xOffset = slotMap.getInvXOffset() + i * Constants.STD_INVENTORY_CELL_SIZE;
-      final int yOffset = slotMap.getInvYOffset() + Constants.STD_INVENTORY_CELL_SIZE * Constants.STD_INVENTORY_ROWS + Constants.STD_INVENTORY_HOTBAR_MARGIN;
+      int xOffset = guiInfo.getInvXOffset() + i * Constants.STD_INVENTORY_CELL_SIZE;
+      final int yOffset = guiInfo.getInvYOffset() + Constants.STD_INVENTORY_CELL_SIZE * Constants.STD_INVENTORY_ROWS + Constants.STD_INVENTORY_HOTBAR_MARGIN;
       addSlotToContainer(new Slot(playerInv, i, xOffset, yOffset));
     }
 
@@ -79,8 +70,8 @@ public class CommonGuiContainer extends Container
       for (int col = 0; col < 9; col++)
       {
         int srcIndex = col + row * 9 + 9;
-        int xOffset = slotMap.getInvXOffset() + col * Constants.STD_INVENTORY_CELL_SIZE;
-        int yOffset = slotMap.getInvYOffset() + row * Constants.STD_INVENTORY_CELL_SIZE;
+        int xOffset = guiInfo.getInvXOffset() + col * Constants.STD_INVENTORY_CELL_SIZE;
+        int yOffset = guiInfo.getInvYOffset() + row * Constants.STD_INVENTORY_CELL_SIZE;
         addSlotToContainer(new Slot(playerInv, 
             srcIndex, 
             xOffset,
