@@ -1,0 +1,13 @@
+How to make a container with inventory/gui:
+1. Create a block which derives from CommonBlockContainer.  This will take care of
+activation to open your gui, as well as dropping items contained in the container when 
+the block is destroyed.  
+2. In your block, implement the createNewTileEntity method to return an instance of class which 
+derives from CommonTileEntityWithInventory (deriving is not necessary, you can instantiate this 
+directly.)  Make sure your inventory id and container info id are unique.
+3. Register a CommonContainerInfo with the container info id above.  This is done in the module
+impl itself.  This container info indicates the background texture, size of gui, and the number
+and layout of slots.  You can override getContainerInstance() and getGuiContainerInstance() to
+provide custom container implementations and custom Gui implementations. 
+
+It should just work!
