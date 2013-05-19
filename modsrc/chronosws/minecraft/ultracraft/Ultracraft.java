@@ -1,6 +1,9 @@
 package chronosws.minecraft.ultracraft;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
+import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
 import chronosws.minecraft.ultracraft.utilities.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,6 +23,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -49,6 +53,9 @@ public class Ultracraft
   // Logger
   public static Logger logger;
 
+  // Gui 
+  public static Map<String, CommonGuiSlotMap> guis;
+  
   //
   // Mod entry points
   //
@@ -69,6 +76,8 @@ public class Ultracraft
     initItems();
     initCrafting();
     initNames();
+    initTileEntities();
+    initGuis();
 
     proxy.registerRenderers();
   }
@@ -123,5 +132,35 @@ public class Ultracraft
     // Ultracrafting Table
     GameRegistry.addRecipe(ucStack, "aaa", "bcb", "bbb", 'a', cobbleStack, 'b',
         plankStack, 'c', chestStack);
+  }
+  
+  private void initTileEntities()
+  {    
+    GameRegistry.registerTileEntity(TileEntityWithInventory.class, TileEntityWithInventory.ENTITY_ID);
+  }
+  
+  private void initGuis()
+  {  
+    // 
+    // Define textures and slot positions
+    //
+    CommonGuiSlotMap slotMap = new CommonGuiSlotMap("/mods/Ultracraft/textures/gui/container.png", 
+        176, 222, 
+        8, 140);
+    for (int i = 0; i < 6; i++)
+    {
+      for (int j = 0; j < 9; j++)
+      {
+        slotMap.addSlot(8 + j * 18, 18 + i * 18);
+      }
+    }
+
+    this.guis = new HashMap<String, CommonGuiSlotMap>();
+    this.guis.put("UltraCraftingTableGui", slotMap);
+    
+    //
+    // Register any special handlers
+    //
+    NetworkRegistry.instance().registerGuiHandler(this, new CommonGuiHandler());
   }
 }
