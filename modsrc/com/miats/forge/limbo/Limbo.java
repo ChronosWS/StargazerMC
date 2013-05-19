@@ -5,11 +5,16 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import net.minecraft.command.ICommandManager;
+import net.minecraft.command.ServerCommandManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 
 @Mod(modid="com_miats_limbo", name="Limbo", version="0.1.0")
@@ -23,6 +28,15 @@ public class Limbo {
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide="com.miats.forge.limbo.client.ClientProxy", serverSide="com.miats.forge.limbo.CommonProxy")
 	public static CommonProxy proxy;
+	
+	@ServerStarting
+	public void serverStart(FMLServerStartingEvent event)
+	{
+		MinecraftServer server = MinecraftServer.getServer();
+		ICommandManager command = server.getCommandManager();
+		ServerCommandManager serverCommand = ((ServerCommandManager) command);
+		serverCommand.registerCommand(new LimboDebugCommand());
+	}
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {

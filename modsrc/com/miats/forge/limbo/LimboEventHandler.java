@@ -1,12 +1,14 @@
 package com.miats.forge.limbo;
 
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -53,6 +55,13 @@ public class LimboEventHandler {
 				e.setCanceled(true);
 			}
 		}
+	}
+	
+	@ForgeSubscribe
+	public void TerrainGenHandler(ChunkProviderEvent.ReplaceBiomeBlocks e) {
+		
+		//if (e instan)
+		
 	}
 
 }
