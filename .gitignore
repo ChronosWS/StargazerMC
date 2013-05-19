@@ -7,5 +7,10 @@
 *.war
 *.ear
 
+# Mac files
+*.DS_Store
+
 # VIM files
 *~
+*.swp
+
