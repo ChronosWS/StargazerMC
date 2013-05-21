@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
 import chronosws.minecraft.ultracraft.client.CommonGuiContainer;
+import chronosws.minecraft.ultracraft.client.GuiBuffBar;
+import chronosws.minecraft.ultracraft.client.GuiTest;
 import chronosws.minecraft.ultracraft.common.CommonGuiHandler;
 import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonProxy;
@@ -12,6 +14,7 @@ import chronosws.minecraft.ultracraft.common.CommonTileEntityWithInventory;
 import chronosws.minecraft.ultracraft.utilities.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -91,6 +94,7 @@ public class Ultracraft
   public void postInit(FMLPostInitializationEvent event)
   {
     // Stub Method
+    MinecraftForge.EVENT_BUS.register(new GuiBuffBar(Minecraft.getMinecraft()));
   }
 
   //
