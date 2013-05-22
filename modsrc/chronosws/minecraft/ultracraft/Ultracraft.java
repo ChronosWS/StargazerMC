@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
 import chronosws.minecraft.ultracraft.client.CommonGuiContainer;
 import chronosws.minecraft.ultracraft.client.GuiBuffBar;
-import chronosws.minecraft.ultracraft.client.GuiTest;
 import chronosws.minecraft.ultracraft.common.CommonGuiHandler;
 import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonProxy;
