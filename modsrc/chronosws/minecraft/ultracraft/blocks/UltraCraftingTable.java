@@ -1,5 +1,6 @@
 package chronosws.minecraft.ultracraft.blocks;
 
+import java.util.List;
 import java.util.Random;
 import chronosws.minecraft.ultracraft.Ultracraft;
 import chronosws.minecraft.ultracraft.common.CommonBlockContainer;
@@ -15,6 +16,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -30,6 +32,7 @@ public class UltraCraftingTable extends CommonBlockContainer
   public UltraCraftingTable(int blockId, Material material)
   {
     super(blockId, material);    
+    initRecipeLookup();
   }
 
   /**
@@ -59,4 +62,9 @@ public class UltraCraftingTable extends CommonBlockContainer
   {
     return new CommonTileEntityWithInventory("UltraCraftingTable", "UltraCraftingTableGui");
   }  
+  
+  private void initRecipeLookup()
+  {
+    List recipes = CraftingManager.getInstance().getRecipeList();
+  }
 }

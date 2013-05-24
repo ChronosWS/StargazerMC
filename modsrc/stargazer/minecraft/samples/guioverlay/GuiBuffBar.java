@@ -1,4 +1,4 @@
-package chronosws.minecraft.samples.guioverlay;
+package stargazer.minecraft.samples.guioverlay;
 
 import java.util.Collection;
 import java.util.Iterator;

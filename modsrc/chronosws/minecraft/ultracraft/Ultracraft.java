@@ -3,22 +3,20 @@ package chronosws.minecraft.ultracraft;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
-import chronosws.minecraft.ultracraft.client.CommonGuiContainer;
-import chronosws.minecraft.ultracraft.client.GuiBuffBar;
-import chronosws.minecraft.ultracraft.common.CommonGuiHandler;
-import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
-import chronosws.minecraft.ultracraft.common.CommonProxy;
-import chronosws.minecraft.ultracraft.common.CommonTileEntityWithInventory;
-import chronosws.minecraft.ultracraft.utilities.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
+import chronosws.minecraft.ultracraft.client.GuiBuffBar;
+import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
+import chronosws.minecraft.ultracraft.common.CommonGuiHandler;
+import chronosws.minecraft.ultracraft.common.CommonProxy;
+import chronosws.minecraft.ultracraft.common.CommonTileEntityWithInventory;
+import chronosws.minecraft.ultracraft.utilities.Config;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -34,11 +32,12 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = Ultracraft.ID, name = "Ultracrafting Table", version = Ultracraft.VERSION)
+@Mod(modid = Ultracraft.ID, name = Ultracraft.NAME, version = Ultracraft.VERSION)
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class Ultracraft
 {
   public final static String ID = "Ultracraft";
+  public final static String NAME = "Ultracraft";
   public final static String VERSION = "1.0";
   
   public static GeneralConfig generalConfig = new GeneralConfig();
@@ -72,7 +71,6 @@ public class Ultracraft
   {
     logger = Logger.getLogger(ID);
     logger.setParent(FMLLog.getLogger());
-        
     Config.load(event.getSuggestedConfigurationFile(), generalConfig);
   }
 
@@ -80,19 +78,18 @@ public class Ultracraft
   public void load(FMLInitializationEvent event)
   {
     initBlocks();
-    initItems();
-    initCrafting();
-    initNames();
-    initTileEntities();
-    initGuis();
-
     proxy.registerRenderers();
   }
-
+  
   @PostInit
   public void postInit(FMLPostInitializationEvent event)
   {
-    // Stub Method
+    initCrafting();
+    initTileEntities();
+    initGuis();
+    initItems();
+    initNames();
+
     MinecraftForge.EVENT_BUS.register(new GuiBuffBar(Minecraft.getMinecraft()));
   }
 
@@ -116,6 +113,32 @@ public class Ultracraft
   // Initialize items
   private void initItems()
   {
+    Item.itemsList[Item.pickaxeStone.itemID].setMaxDamage(0);
+    Item.itemsList[Item.pickaxeIron.itemID].setMaxDamage(0);
+    Item.itemsList[Item.pickaxeGold.itemID].setMaxDamage(0);
+    Item.itemsList[Item.pickaxeWood.itemID].setMaxDamage(0);
+    Item.itemsList[Item.pickaxeDiamond.itemID].setMaxDamage(0);
+
+    Item.itemsList[Item.shovelStone.itemID].setMaxDamage(0);
+    Item.itemsList[Item.shovelIron.itemID].setMaxDamage(0);
+    Item.itemsList[Item.shovelGold.itemID].setMaxDamage(0);
+    Item.itemsList[Item.shovelWood.itemID].setMaxDamage(0);
+    Item.itemsList[Item.shovelDiamond.itemID].setMaxDamage(0);
+
+    Item.itemsList[Item.hoeStone.itemID].setMaxDamage(0);
+    Item.itemsList[Item.hoeIron.itemID].setMaxDamage(0);
+    Item.itemsList[Item.hoeGold.itemID].setMaxDamage(0);
+    Item.itemsList[Item.hoeWood.itemID].setMaxDamage(0);
+    Item.itemsList[Item.hoeDiamond.itemID].setMaxDamage(0);
+
+    Item.itemsList[Item.axeStone.itemID].setMaxDamage(0);
+    Item.itemsList[Item.axeIron.itemID].setMaxDamage(0);
+    Item.itemsList[Item.axeGold.itemID].setMaxDamage(0);
+    Item.itemsList[Item.axeWood.itemID].setMaxDamage(0);
+    Item.itemsList[Item.axeDiamond.itemID].setMaxDamage(0);
+
+    Item.itemsList[Item.shears.itemID].setMaxDamage(0);
+    
     genericItem = new GenericItem(generalConfig.genericItemId)
       .setMaxStackSize(64)
       .setUnlocalizedName("genericItem")

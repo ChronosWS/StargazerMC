@@ -1,4 +1,4 @@
-package chronosws.minecraft.samples.guioverlay;
+package stargazer.minecraft.samples.common;
 
 public class CommonProxy
 {
