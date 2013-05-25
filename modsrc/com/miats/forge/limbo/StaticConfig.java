@@ -10,4 +10,8 @@ public class StaticConfig {
 	public static final double LIMBO_SPAWN_MINFUZZ = 2.0;
 	public static final double LIMBO_SPAWN_MAXFUZZ = 4.0;
 	
+	public static final int RESIGNATION_X = 0;
+	public static final int RESIGNATION_Z = 0;
+	public static final int RESIGNATION_Y = 63;
+	
 }

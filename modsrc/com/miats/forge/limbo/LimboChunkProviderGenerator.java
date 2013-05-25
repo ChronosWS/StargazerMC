@@ -87,15 +87,12 @@ public class LimboChunkProviderGenerator implements IChunkProvider
      */
     public void generateTerrain(int par1, int par2, byte[] chunkData)
     {
-    	//for (int i =0; i < chunkData.length; i++) {
-    	//	chunkData[i] = (Math.random() > 0.99) ? (byte)Block.stone.blockID : (byte)0;
-    	//}
     	int d = 0;
     	for (int x = 0; x < 16; x++) {
     		for (int z = 0; z < 16; z++) {
         		for (int y = 0; y < 128; y++) {
         			if (x % 8 != 0)
-        				chunkData[d] = (y < 64) ? (byte)Block.stone.blockID : (byte)0;
+        				chunkData[d] = (y < 64) ? (byte)49 : (byte)0;
             		d++;
             	}
         	}
