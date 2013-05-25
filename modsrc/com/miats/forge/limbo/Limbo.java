@@ -16,6 +16,7 @@ import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
+import com.miats.forge.modkit.*;
 
 @Mod(modid="com_miats_limbo", name="Limbo", version="0.1.0")
 @NetworkMod(clientSideRequired=true, serverSideRequired=true)
@@ -28,6 +29,11 @@ public class Limbo {
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide="com.miats.forge.limbo.client.ClientProxy", serverSide="com.miats.forge.limbo.CommonProxy")
 	public static CommonProxy proxy;
+	
+	public Limbo()
+	{
+		ModKit.register(this);
+	}
 	
 	@ServerStarting
 	public void serverStart(FMLServerStartingEvent event)
