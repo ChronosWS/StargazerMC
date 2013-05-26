@@ -71,7 +71,7 @@ public class Ultracraft
   {
     logger = Logger.getLogger(ID);
     logger.setParent(FMLLog.getLogger());
-    Config.load(event.getSuggestedConfigurationFile(), generalConfig);
+    Config.load(event.getModConfigurationDirectory(), ID, generalConfig);
   }
 
   @Init

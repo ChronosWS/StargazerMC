@@ -10,6 +10,12 @@ import net.minecraftforge.common.Property;
 public class Config
 {
   @Retention(RetentionPolicy.RUNTIME)
+  public static @interface CfgSource
+  {
+    public String file() default "";
+  }
+
+  @Retention(RetentionPolicy.RUNTIME)
   public static @interface CfgDesc
   {
     public String desc() default "";
@@ -30,8 +36,10 @@ public class Config
   // public static @CfgVal boolean booleanConfig = false;
   // public static @CfgDesc(desc="Does this and that") @CfgVal int itemId = 1000;
   
-  public static Configuration load(File configFile, Object configClass)
+  public static Configuration load(File baseConfigurationDirectory, String modId, Object configClass)
   {
+    File configFile = getConfigFile(baseConfigurationDirectory, modId, configClass);
+    
     Configuration config = new Configuration(configFile);      
     config.load();
     
@@ -112,5 +120,24 @@ public class Config
     }
     
     return config;
+  }
+
+  private static File getConfigFile(File baseConfigurationDirectory,
+      String modId, Object configClass)
+  {
+    File modPath = new File(baseConfigurationDirectory, modId);
+    File fullPath;
+    
+    CfgSource sourceAnnotation = configClass.getClass().getAnnotation(CfgSource.class);
+    if(sourceAnnotation == null || sourceAnnotation.file().isEmpty())
+    {
+      fullPath = new File(modPath, configClass.getClass().getSimpleName() + ".cfg");
+    }
+    else     
+    {
+      fullPath = new File(modPath, sourceAnnotation.file() + ".cfg");
+    }
+    
+    return fullPath;
   }
 }
