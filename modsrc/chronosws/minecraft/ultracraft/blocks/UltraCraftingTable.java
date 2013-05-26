@@ -29,10 +29,13 @@ public class UltraCraftingTable extends CommonBlockContainer
   @SideOnly(Side.CLIENT)
   private Icon workbenchIconFront;
 
-  public UltraCraftingTable(int blockId, Material material)
+  private UltracraftRecipes recipes;
+  
+  public UltraCraftingTable(RecipeConfig config, int blockId, Material material)
   {
-    super(blockId, material);    
-    initRecipeLookup();
+    super(blockId, material);
+    this.recipes = new UltracraftRecipes(config);
+    this.recipes.updateRecipeMappings();
   }
 
   /**
@@ -62,9 +65,4 @@ public class UltraCraftingTable extends CommonBlockContainer
   {
     return new CommonTileEntityWithInventory("UltraCraftingTable", "UltraCraftingTableGui");
   }  
-  
-  private void initRecipeLookup()
-  {
-    List recipes = CraftingManager.getInstance().getRecipeList();
-  }
 }

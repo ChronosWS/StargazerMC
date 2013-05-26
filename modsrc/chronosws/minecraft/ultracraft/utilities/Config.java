@@ -7,36 +7,84 @@ import java.lang.reflect.Field;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 
+/**
+ * Implements helper methods used to save and restore configurations from the file system.
+ * 
+ * @author Cliff
+ *
+ */
 public class Config
 {
+  /**
+   * Annotation for a config class specifying the name of the file to use.  The default is to 
+   * use the class name itself.
+   */
   @Retention(RetentionPolicy.RUNTIME)
   public static @interface CfgSource
   {
     public String file() default "";
   }
 
+  /**
+   * Annotation for a config field specifying the comment to be placed in the config file.
+   * 
+   * <p>Example:<p>
+   * <code>
+     @CfgDesc(desc="Does this and that")
+     @CfgVal
+     public static int itemId = 1000;
+     </code>
+   */
   @Retention(RetentionPolicy.RUNTIME)
   public static @interface CfgDesc
   {
     public String desc() default "";
   }
-  
+
+  /**
+   * Annotation for a config field representing an item id.
+   * 
+   * <p>Example:<p>
+   * <code>@CfgItem public static int itemId = 12000;</code>
+   */
   @Retention(RetentionPolicy.RUNTIME)
   public static @interface CfgItem {};
 
+  /**
+   * Annotation for a config field representing a block id.
+
+   * <p>Example:<p>
+   * <code> @CfgBlock public static int blockId = 1500;</code>
+   */
   @Retention(RetentionPolicy.RUNTIME)
   public static @interface CfgBlock {}
 
+  /**
+   * Annotation for a config field representing a general value.
+   * <p>Example:<p>
+   * <code>@CfgVal public static boolean boolVal = false;</code>
+   */
   @Retention(RetentionPolicy.RUNTIME)
   public static @interface CfgVal {}
-  
-  // example use
-  // public static @CfgItem int itemId = 12000;
-  // public static @CfgBlock int blockId = 350;
-  // public static @CfgVal boolean booleanConfig = false;
-  // public static @CfgDesc(desc="Does this and that") @CfgVal int itemId = 1000;
-  
-  public static Configuration load(File baseConfigurationDirectory, String modId, Object configClass)
+    
+  /**
+   * Synchronizes the config file specified settings with the provided config class.
+   * 
+   * <p>
+   * This behavior results in values in the config class being overwritten with any which have
+   * been provided in the configuration file.  The configuration may be modified and re-synced 
+   * after initial load, but no changes which affect values already present in the file will be
+   * saved.
+   * 
+   * @param baseConfigurationDirectory
+   * The base directory for configs (/config in the Minecraft directory).
+   * @param modId
+   * The module ID.
+   * @param configClass
+   * The class with annotated fields which will be synchronized with the file representation.
+   * @return The Configuration object representing the file version of the configuration.
+   */
+  public static Configuration sync(File baseConfigurationDirectory, String modId, Object configClass)
   {
     File configFile = getConfigFile(baseConfigurationDirectory, modId, configClass);
     
@@ -122,6 +170,13 @@ public class Config
     return config;
   }
 
+  /**
+   * Determines the full path to the configuration file for the specified mod and config class.
+   * @param baseConfigurationDirectory
+   * @param modId
+   * @param configClass
+   * @return The full path to the config file.
+   */
   private static File getConfigFile(File baseConfigurationDirectory,
       String modId, Object configClass)
   {

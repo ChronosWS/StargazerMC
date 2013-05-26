@@ -10,6 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import chronosws.minecraft.ultracraft.blocks.RecipeConfig;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
 import chronosws.minecraft.ultracraft.client.GuiBuffBar;
 import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
@@ -41,6 +42,7 @@ public class Ultracraft
   public final static String VERSION = "1.0";
   
   public static GeneralConfig generalConfig = new GeneralConfig();
+  public static RecipeConfig recipeConfig = new RecipeConfig();
   
   //
   // Items and blocks
@@ -71,7 +73,8 @@ public class Ultracraft
   {
     logger = Logger.getLogger(ID);
     logger.setParent(FMLLog.getLogger());
-    Config.load(event.getModConfigurationDirectory(), ID, generalConfig);
+    Config.sync(event.getModConfigurationDirectory(), ID, generalConfig);
+    Config.sync(event.getModConfigurationDirectory(), ID, recipeConfig);
   }
 
   @Init
@@ -100,7 +103,7 @@ public class Ultracraft
   // Initialize blocks
   private void initBlocks()
   {
-    ucTable = new UltraCraftingTable(generalConfig.ucTableId, Material.wood)
+    ucTable = new UltraCraftingTable(this.recipeConfig, generalConfig.ucTableId, Material.wood)
       .setHardness(2.5F)
       .setStepSound(Block.soundWoodFootstep)
       .setUnlocalizedName("ucTable")

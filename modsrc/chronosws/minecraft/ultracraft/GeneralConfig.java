@@ -7,7 +7,7 @@ import chronosws.minecraft.ultracraft.utilities.Config.CfgSource;
 @CfgSource(file="Ultracraft")
 public class GeneralConfig
 {
-  public @CfgBlock int ucTableId = 500;
-  public @CfgItem int genericItemId = 5000;
-  public @CfgItem int itemPickaxeId = 5001;
+  @CfgBlock public int ucTableId = 500;
+  @CfgItem  public int genericItemId = 5000;
+  @CfgItem  public int itemPickaxeId = 5001;
 }
