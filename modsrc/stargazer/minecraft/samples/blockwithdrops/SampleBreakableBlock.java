@@ -38,6 +38,7 @@ public class SampleBreakableBlock extends Block
   @SideOnly(Side.CLIENT)
   public void registerIcons(IconRegister iconRegister)
   {
+	// iconRegister.registerIcon("Name Of The Mod This Block Belongs To:name of png file to use");
     this.icons[Top] = iconRegister.registerIcon("SampleBreakableBlock:top");
     this.icons[Bottom] = iconRegister.registerIcon("SampleBreakableBlock:bottom");
     this.icons[North] = iconRegister.registerIcon("SampleBreakableBlock:north");
