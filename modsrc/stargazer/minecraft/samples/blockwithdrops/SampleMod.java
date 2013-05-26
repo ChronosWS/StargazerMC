@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import stargazer.minecraft.samples.common.CommonProxy;
 import cpw.mods.fml.common.Mod;
@@ -40,6 +41,7 @@ public class SampleMod
   public static CommonProxy proxy;
   
   public static Block breakableBlock;
+  public static Item sampleItem;
   
   //
   // Mod entry points
@@ -50,7 +52,9 @@ public class SampleMod
   {
     proxy.registerRenderers();
     
-    breakableBlock = new SampleBreakableBlock(1001, Material.wood)
+    this.sampleItem = new SampleItem(SampleItem.SAMPLE_ITEM_ID);
+    
+    this.breakableBlock = new SampleBreakableBlock(1001, Material.wood)
     .setHardness(2.5F)
     .setStepSound(Block.soundWoodFootstep)
     .setUnlocalizedName("sampleBreakableBlock")
