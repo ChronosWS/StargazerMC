@@ -70,7 +70,7 @@ public class SampleBreakableBlock extends Block
     ArrayList<ItemStack> ret = super.getBlockDropped(world, x, y, z, metadata, fortune);
 
     // Drop an additional stack of 0 to 4 items with no metadata.
-    ret.add(new ItemStack(SampleItem.SAMPLE_ITEM_ID, world.rand.nextInt(5), 0));
+    ret.add(new ItemStack(SampleMod.sampleItem.itemID, world.rand.nextInt(5), 0));
     return ret;
   }  
 }

@@ -52,7 +52,8 @@ public class SampleMod
   {
     proxy.registerRenderers();
     
-    this.sampleItem = new SampleItem(SampleItem.SAMPLE_ITEM_ID);
+    this.sampleItem = new SampleItem(4097);
+    LanguageRegistry.addName(sampleItem, "Sample Item");
     
     this.breakableBlock = new SampleBreakableBlock(1001, Material.wood)
     .setHardness(2.5F)

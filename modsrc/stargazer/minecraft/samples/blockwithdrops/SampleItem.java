@@ -6,14 +6,9 @@ import net.minecraft.item.Item;
 
 public class SampleItem extends Item 
 {
-  public static final int SAMPLE_ITEM_ID = 4097;
-  
 	public SampleItem(int itemId) 
 	{
-	  // Item IDs are normally offset up by 256 (to avoid conflicting with base items representing
-	  // blocks.)  Since we aren't going to conflict, eliminate the offset.
-		super(itemId - 256);
-		
+		super(itemId);		
 		this.maxStackSize = 64;
 		this.setCreativeTab(CreativeTabs.tabMisc);
 		this.setUnlocalizedName("sampleItem");
