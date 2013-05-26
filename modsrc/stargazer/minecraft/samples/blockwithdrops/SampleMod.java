@@ -55,7 +55,7 @@ public class SampleMod
     this.sampleItem = new SampleItem(4097);
     LanguageRegistry.addName(sampleItem, "Sample Item");
     
-    this.breakableBlock = new SampleBreakableBlock(1001, Material.wood)
+    this.breakableBlock = new SampleBlock(1001, Material.wood)
     .setHardness(2.5F)
     .setStepSound(Block.soundWoodFootstep)
     .setUnlocalizedName("sampleBreakableBlock")
