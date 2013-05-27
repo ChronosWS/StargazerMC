@@ -13,13 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
-public class BlockCopperOre extends Block
+public class BlockCopper extends Block
 {
    
   @SideOnly(Side.CLIENT)
   private Icon icon;
 
-  public BlockCopperOre(int blockId, Material material)
+  public BlockCopper(int blockId, Material material)
   {  
     super(blockId, material);
   }
@@ -47,7 +47,7 @@ public class BlockCopperOre extends Block
   public void registerIcons(IconRegister iconRegister)
   {
    
-    this.icon = iconRegister.registerIcon(MinecraftEssentials.ID + ":oreCopper");
+    this.icon = iconRegister.registerIcon(MinecraftEssentials.ID + ":copper");
   }
 
   /**
@@ -75,13 +75,6 @@ public class BlockCopperOre extends Block
   public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortuneLvl)
   {
     // Get the default drops (which is just the block itself)
-    //ArrayList<ItemStack> ret = super.getBlockDropped(world, x, y, z, metadata, fortuneLvl);
-    
-    ArrayList<ItemStack> itemsDropped = new ArrayList<ItemStack>();
-          
-    // Drop an additional stack of 0 to 4 items with no metadata.
-    itemsDropped.add(new ItemStack(MinecraftEssentials.itemCopperOre.itemID, world.rand.nextInt(3) + 1 + fortuneLvl, 0));
-    
-    return itemsDropped;
+    return super.getBlockDropped(world, x, y, z, metadata, fortuneLvl);
   }  
 }

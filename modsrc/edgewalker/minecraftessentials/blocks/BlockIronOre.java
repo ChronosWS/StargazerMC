@@ -13,13 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
-public class BlockCopperOre extends Block
+public class BlockIronOre extends Block
 {
    
   @SideOnly(Side.CLIENT)
   private Icon icon;
 
-  public BlockCopperOre(int blockId, Material material)
+  public BlockIronOre(int blockId, Material material)
   {  
     super(blockId, material);
   }
@@ -47,7 +47,7 @@ public class BlockCopperOre extends Block
   public void registerIcons(IconRegister iconRegister)
   {
    
-    this.icon = iconRegister.registerIcon(MinecraftEssentials.ID + ":oreCopper");
+    this.icon = iconRegister.registerIcon(MinecraftEssentials.ID + ":oreIron");
   }
 
   /**
@@ -79,8 +79,8 @@ public class BlockCopperOre extends Block
     
     ArrayList<ItemStack> itemsDropped = new ArrayList<ItemStack>();
           
-    // Drop an additional stack of 0 to 4 items with no metadata.
-    itemsDropped.add(new ItemStack(MinecraftEssentials.itemCopperOre.itemID, world.rand.nextInt(3) + 1 + fortuneLvl, 0));
+    // Drop 1-3 ore items upon breaking, with 1 additional drop for each level of fortune the player has on tool
+    itemsDropped.add(new ItemStack(MinecraftEssentials.itemIronOre.itemID, world.rand.nextInt(3) + fortuneLvl + 1, 0));
     
     return itemsDropped;
   }  
