@@ -37,7 +37,7 @@ public class CommonContainerInfo
       return this.yOffset;
     }
   }
-  
+    
   private String backgroundTexture; 
   private List<SlotInfo> mapping;
   private int guiWidth;

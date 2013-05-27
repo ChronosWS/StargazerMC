@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import chronosws.minecraft.ultracraft.blocks.RecipeConfig;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
-import chronosws.minecraft.ultracraft.client.GuiBuffBar;
+import chronosws.minecraft.ultracraft.client.UltracraftingContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonGuiHandler;
 import chronosws.minecraft.ultracraft.common.CommonProxy;
@@ -92,8 +92,6 @@ public class Ultracraft
     initGuis();
     initItems();
     initNames();
-
-    MinecraftForge.EVENT_BUS.register(new GuiBuffBar(Minecraft.getMinecraft()));
   }
 
   //
@@ -176,22 +174,10 @@ public class Ultracraft
   private void initGuis()
   {  
     // 
-    // Define textures and slot positions
+    // Register our guis
     // TODO: Tie this in more closely with the block declarations so we can 
     //       get the container impls.
-    CommonContainerInfo guiInfo = new CommonContainerInfo(
-        "/mods/Ultracraft/textures/gui/container.png", 
-        176, 222, 
-        8, 140);
-    for (int i = 0; i < 6; i++)
-    {
-      for (int j = 0; j < 9; j++)
-      {
-        guiInfo.addSlot(8 + j * 18, 18 + i * 18);
-      }
-    }
-
-    this.guis.put("UltraCraftingTableGui", guiInfo);
+    this.guis.put("UltraCraftingTableGui", new UltracraftingContainerInfo());
     
     //
     // Register any special handlers

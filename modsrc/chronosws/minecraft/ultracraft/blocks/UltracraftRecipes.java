@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,65 +20,77 @@ public class UltracraftRecipes
     /**
      * Recipes for tools 
      */
-    TOOLS,
+    TOOLS ("Tools"),
+
+    /**
+     *  Recipes for construction materials
+     */
+    MASONRY ("Masonry"),
+
+    /**
+     *  Recipes which convert ore from raw materials into ingots and such.
+     */
+    ORES ("Ores"),
 
     /**
      * Recipes for machines
      */
-    MACHINES,
-    
-    /**
-     *  Recipes which convert ore from raw materials into ingots and such.
-     */
-    ORES,
-        
+    MACHINES ("Machines"),
+
     /**
      *  Recipes for metal items with significant tooling, such as armor and weapons
      */
-    ARMOURY,
-    
-    /**
-     *  Recipes for construction materials
-     */
-    MASONRY,
-    
+    ARMOURY ("Armoury"),
+
     /**
      *  Recipes for more complex wood-based items
      */
-    WOODWORKING,
+    WOODWORKING ("Woodworking"),
     
     /**
      *  Recipes for working with wool and string to make cloth
      */
-    CLOTH, 
-    
-    /**
-     *  Recipes for jewelry
-     */
-    JEWELRY,
-
-    /**
-     *  Recipes for exotic/magic items such as blaze powder
-     */
-    EXOTIC, 
+    CLOTH ("Cloth"), 
 
     /**
      * Recipes for food
      */
-    FOOD,
+    FOOD ("Food"),
+
+    /**
+     *  Recipes for jewelry
+     */
+    JEWELRY ("Jewelry"),
+
+    /**
+     *  Recipes for exotic/magic items such as blaze powder
+     */
+    EXOTIC ("Exotic"), 
 
     /**
      * Recipes for potions
      */
-    BREWING,
+    BREWING ("Brewing"),
 
     /**
      *  Recipes which do not fall into any other category
      */
-    MISCELLANEOUS,    
+    MISCELLANEOUS ("Miscellaneous");
+    
+    RecipeCategory(String uiName)
+    {
+      LanguageRegistry.instance().addStringLocalization(getLocalizationId(), uiName);
+    }
+    private String getLocalizationId()
+    {
+      return "UCRecipe." + this.name();
+    }
+    public String getUIName()
+    {
+      return LanguageRegistry.instance().getStringLocalization(getLocalizationId());
+    }
   }
-  
-  
+    
   /**
    * Represents a recipe for a single item. 
    * @author Cliff

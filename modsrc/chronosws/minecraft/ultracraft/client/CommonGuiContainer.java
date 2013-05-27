@@ -9,7 +9,9 @@ import net.minecraft.util.StatCollector;
 
 public class CommonGuiContainer extends GuiContainer
 {
-  private CommonContainer outerContainer;
+  public static final int MOUSE_EVENT_MOVE = -1;
+  
+  protected CommonContainer outerContainer;
   public CommonGuiContainer(CommonContainer container)
   {
     super(container);
