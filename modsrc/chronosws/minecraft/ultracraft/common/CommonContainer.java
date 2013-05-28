@@ -35,7 +35,17 @@ public class CommonContainer extends Container
   {
     return this.guiInfo;
   }
-    
+  
+  public TileEntity getTileEntity()
+  {
+    return this.containerEntity;
+  }
+ 
+  public IInventory getContainerInventory()
+  {
+    return this.containerInventory;
+  }
+  
   private void bindInventories(InventoryPlayer playerInv)
   {
     //

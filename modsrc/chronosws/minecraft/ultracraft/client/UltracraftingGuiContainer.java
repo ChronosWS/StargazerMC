@@ -1,40 +1,85 @@
 package chronosws.minecraft.ultracraft.client;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiSlider;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
+import org.lwjgl.util.Rectangle;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import chronosws.minecraft.ultracraft.Ultracraft;
+import chronosws.minecraft.ultracraft.blocks.MulticraftMachine;
 import chronosws.minecraft.ultracraft.blocks.UltracraftRecipes.RecipeCategory;
 import chronosws.minecraft.ultracraft.common.CommonContainer;
 
+@SideOnly(Side.CLIENT)
 public class UltracraftingGuiContainer extends CommonGuiContainer
 {  
   private class CategoryInfo
   {
     public Point categoryLocation;
     public ItemStack itemStack;
-    public boolean isAvailable;
+    public int machineBlockId;
+    public List<MulticraftMachine> supportingMachines;
     
     public CategoryInfo(Point location, ItemStack stack)
     {
       this.categoryLocation = location;
       this.itemStack = stack;
-      this.isAvailable = true;
+      this.machineBlockId = 0;
+      this.supportingMachines = new ArrayList();
+    }
+    
+    public boolean isAvailable()
+    {
+      return !this.supportingMachines.isEmpty();
     }
   };
   
   private HashMap<RecipeCategory, CategoryInfo> categoryInfos;    
   private RecipeCategory selectedCategory;  
+  private RecipeCategory hoverCategory;
   private UltracraftingContainerInfo containerInfo;
+  private int machineSearchRadius;
+  
   public UltracraftingGuiContainer(CommonContainer container)
   {
     super(container);
-    this.containerInfo = (UltracraftingContainerInfo) container.getGuiInfo();
+    this.containerInfo = (UltracraftingContainerInfo) container.getGuiInfo();    
+    this.categoryInfos = new HashMap();
+    this.machineSearchRadius = Ultracraft.generalConfig.multicraftSearchRadius;          
+    this.selectedCategory = RecipeCategory.TOOLS;
+  }
+
+  public static final int BUTTON_WIDTH = 30;
+  public static final int BUTTON_HEIGHT = 20;
+  public static final int BUTTON_SPACING = 1;
+  
+  @Override
+  public void initGui()
+  {
+    super.initGui();
+    //this.buttonList.add(new SliderControl(1, 250, 20, "ultracraft.recipeSlider", 0F));
+    super.buttonList.add(new GuiButton(1, getContainerLeft() + getContainerWidth(), getContainerTop(), BUTTON_WIDTH, BUTTON_HEIGHT, "Up"));
+    super.buttonList.add(new GuiButton(2, getContainerLeft() + getContainerWidth(), getContainerTop() + BUTTON_HEIGHT + BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT, "Down"));
+
+    this.initCategories();   
+  }
+  
+  protected void initCategories()
+  {
     HashMap<RecipeCategory, ItemStack> categoryItems = new HashMap()
     {
       {
@@ -52,23 +97,35 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
         put(RecipeCategory.WOODWORKING, new ItemStack(Item.boat));
       }
     };
-    
-    this.categoryInfos = new HashMap();
-    int categoryIndex = 0;
+
+    int categoryIndex = 2;
     for(RecipeCategory category : RecipeCategory.values())
     {
       this.categoryInfos.put(category, new CategoryInfo(getCategoryLocation(categoryIndex), categoryItems.get(category)));
+      
       categoryIndex++;
     }
-          
-    this.selectedCategory = RecipeCategory.TOOLS;
-  }
+    
+    this.updateAvailableCategories();
 
+    for(CategoryInfo info : this.categoryInfos.values())
+    {
+      Point pt = info.categoryLocation;
+      ButtonControl button = new ButtonControl(categoryIndex, pt.getX(), pt.getY(), 20, 20, info.itemStack);
+      button.enabled = info.isAvailable();
+      super.buttonList.add(button);            
+    }
+  }
+  
+  @Override
+  protected void actionPerformed(GuiButton button)
+  {    
+  }
+  
   @Override
   protected void drawGuiContainerForegroundLayer(int x, int y)
   {
-    super.drawGuiContainerForegroundLayer(x, y);
-    
+    super.drawGuiContainerForegroundLayer(x, y);    
     drawRecipesForSelectedCategory();    
   }
 
@@ -76,9 +133,35 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
   protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
   {
     super.drawGuiContainerBackgroundLayer(f, i, j);
-    drawCategoryTabs();
   }
 
+  /**
+   * Handles mouse input.
+   */
+  @Override
+  public void handleMouseInput()
+  {
+      int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+      int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+      
+      this.hoverCategory = getHoverCategory(mouseX, mouseY);
+      super.handleMouseInput();
+  }
+
+  @Override
+  protected void mouseMovedOrUp(int x, int y, int mouseEventType)
+  {
+    if(mouseEventType != MOUSE_EVENT_MOVE)
+    {
+      if(this.hoverCategory != null && this.categoryInfos.get(this.hoverCategory).isAvailable())
+      {
+        this.selectedCategory = this.hoverCategory;
+      }
+    }
+    
+    super.mouseMovedOrUp(x, y, mouseEventType);
+  }
+  
   private RecipeCategory getHoverCategory(int mouseX, int mouseY)
   {
     for(RecipeCategory category : RecipeCategory.values())
@@ -97,29 +180,24 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
     
     return null;
   }
-  
-  @Override
-  protected void mouseMovedOrUp(int mouseX, int mouseY, int mouseEventType)
+    
+  private void drawCategoryTooltip()
   {
-    RecipeCategory hoverCategory = getHoverCategory(mouseX, mouseY);
-    if(hoverCategory != null)
-    {
-      if(mouseEventType == MOUSE_EVENT_MOVE)
-      {
-        
-      }
-      else
-      {
-        this.selectedCategory = hoverCategory;
-      }
-    }
+    CategoryInfo categoryInfo = this.categoryInfos.get(hoverCategory);
+    
+    int x = categoryInfo.categoryLocation.getX() + CATEGORY_COLUMN_WIDTH / 2;
+    int y = categoryInfo.categoryLocation.getY() + CATEGORY_COLUMN_WIDTH / 2;
+    List list = new ArrayList() {{ add(hoverCategory.getUIName()); }};
+    
+    this.drawHoveringText(list, x, y, this.fontRenderer);    
   }
-  
+
   private void drawRecipesForSelectedCategory()
   {
   }
 
-  private static final int CATEGORY_COLUMN_WIDTH = 20;
+  private static final int CATEGORY_COLUMN_WIDTH = 23;
+  private static final int CATEGORY_COLUMN_SPACING = 1;
   private static final int CATEGORY_COLUMN_TOP = 30;
   private static final int CATEGORY_COLUMN_LEFT = 30;
   private static final int CATEGORY_COLUMNS = 2;
@@ -128,7 +206,7 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
   private static final float CATEGORY_UNSELECTED_BRIGHTNESS = 0.3F;
   private static final int SELECTION_BOX_OFFSET = 3;
   private static final int UNAVAILABLE_BOX_OFFSET = 1;
-  private static final int BACKGROUND_BOX_OFFSET = 2;
+  private static final int BACKGROUND_BOX_OFFSET = 2;  
   
   private void drawCategoryTabs()
   {
@@ -155,7 +233,7 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
       itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemStack, x, y);
       
       // Dim out any categories which are not available.
-      if(!info.isAvailable)
+      if(!info.isAvailable())
       {
         this.mc.renderEngine.bindTexture(outerContainer.getGuiInfo().getBackgroundTexture());
         RenderHelper.disableStandardItemLighting();
@@ -180,14 +258,20 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
         GL11.glDisable(GL11.GL_BLEND);       
       }
 
+      if(this.hoverCategory != null)
+      {
+        RenderHelper.disableStandardItemLighting();        
+        drawCategoryTooltip();
+      }
+      
       categoryIndex++;
     }    
   }
   
   private Point getCategoryLocation(int index)
   {
-    int x = CATEGORY_COLUMN_LEFT + CATEGORY_COLUMN_WIDTH * (index % CATEGORY_COLUMNS);
-    int y = CATEGORY_COLUMN_TOP + CATEGORY_COLUMN_WIDTH * (index / 2);
+    int x = getContainerLeft() - CATEGORY_COLUMN_WIDTH * 2 + (CATEGORY_COLUMN_WIDTH + CATEGORY_COLUMN_SPACING) * (index % CATEGORY_COLUMNS);
+    int y = getContainerTop() + (CATEGORY_COLUMN_WIDTH + CATEGORY_COLUMN_SPACING) * (index / 2);
     return new Point(x, y);
   }
   
@@ -209,5 +293,28 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
       colorBuffer.put(par0).put(par1).put(par2).put(par3);
       colorBuffer.flip();
       return colorBuffer;
+  }
+  
+  private void updateAvailableCategories()
+  {
+    TileEntity tileEntity = this.outerContainer.getTileEntity();
+    for(int x = tileEntity.xCoord - this.machineSearchRadius; x < tileEntity.xCoord + this.machineSearchRadius; x++)
+    {
+      for(int y = tileEntity.yCoord - this.machineSearchRadius; y < tileEntity.yCoord + this.machineSearchRadius; y++)
+      {
+        for(int z = tileEntity.zCoord - this.machineSearchRadius; z < tileEntity.zCoord + this.machineSearchRadius; z++)
+        {
+          TileEntity machineEntity = tileEntity.worldObj.getBlockTileEntity(x, y, z);
+          if(machineEntity != null && machineEntity instanceof MulticraftMachine)
+          {
+            MulticraftMachine machine = (MulticraftMachine)machineEntity;
+            for(RecipeCategory category : machine.supportedCategories())
+            {
+              this.categoryInfos.get(category).supportingMachines.add(machine);
+            }                          
+          }
+        }
+      }
+    }
   }
 }
