@@ -30,14 +30,10 @@ public class UltraCraftingTable extends CommonBlockContainer
   private Icon workbenchIconTop;
   @SideOnly(Side.CLIENT)
   private Icon workbenchIconFront;
-
-  private UltracraftRecipes recipes;
   
-  public UltraCraftingTable(RecipeConfig config, int blockId, Material material)
+  public UltraCraftingTable(int blockId, Material material)
   {
     super(blockId, material);
-    this.recipes = new UltracraftRecipes(config);
-    this.recipes.updateRecipeMappings();
   }
 
   /**
@@ -65,6 +61,6 @@ public class UltraCraftingTable extends CommonBlockContainer
   @Override
   public TileEntity createNewTileEntity(World world)
   {
-    return new CommonTileEntityWithInventory("UltraCraftingTable", "UltraCraftingTableGui");
+    return new MulticraftingTableTileEntity("UltraCraftingTable", "UltraCraftingTableGui");
   }  
 }

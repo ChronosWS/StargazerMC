@@ -10,13 +10,14 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import chronosws.minecraft.ultracraft.blocks.RecipeConfig;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
 import chronosws.minecraft.ultracraft.client.UltracraftingContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonGuiHandler;
 import chronosws.minecraft.ultracraft.common.CommonProxy;
 import chronosws.minecraft.ultracraft.common.CommonTileEntityWithInventory;
+import chronosws.minecraft.ultracraft.recipes.RecipeConfig;
+import chronosws.minecraft.ultracraft.recipes.UltracraftRecipes;
 import chronosws.minecraft.ultracraft.utilities.Config;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -43,7 +44,8 @@ public class Ultracraft
   
   public static GeneralConfig generalConfig = new GeneralConfig();
   public static RecipeConfig recipeConfig = new RecipeConfig();
-  
+  public static UltracraftRecipes recipes;
+
   //
   // Items and blocks
   //
@@ -75,6 +77,8 @@ public class Ultracraft
     logger.setParent(FMLLog.getLogger());
     Config.sync(event.getModConfigurationDirectory(), ID, generalConfig);
     Config.sync(event.getModConfigurationDirectory(), ID, recipeConfig);
+    this.recipes = new UltracraftRecipes(recipeConfig);
+    this.recipes.updateRecipeMappings();
   }
 
   @Init
@@ -101,7 +105,7 @@ public class Ultracraft
   // Initialize blocks
   private void initBlocks()
   {
-    ucTable = new UltraCraftingTable(this.recipeConfig, generalConfig.ucTableId, Material.wood)
+    ucTable = new UltraCraftingTable(generalConfig.ucTableId, Material.wood)
       .setHardness(2.5F)
       .setStepSound(Block.soundWoodFootstep)
       .setUnlocalizedName("ucTable")

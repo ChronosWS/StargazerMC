@@ -1,11 +1,12 @@
-package chronosws.minecraft.ultracraft.blocks;
+package chronosws.minecraft.ultracraft.recipes;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import cpw.mods.fml.common.registry.LanguageRegistry;
+import java.util.Set;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,136 +16,14 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 
 public class UltracraftRecipes
 {
-  public enum RecipeCategory
-  {
-    /**
-     * Recipes for tools 
-     */
-    TOOLS ("Tools"),
-
-    /**
-     *  Recipes for construction materials
-     */
-    MASONRY ("Masonry"),
-
-    /**
-     *  Recipes which convert ore from raw materials into ingots and such.
-     */
-    ORES ("Ores"),
-
-    /**
-     * Recipes for machines
-     */
-    MACHINES ("Machines"),
-
-    /**
-     *  Recipes for metal items with significant tooling, such as armor and weapons
-     */
-    ARMOURY ("Armoury"),
-
-    /**
-     *  Recipes for more complex wood-based items
-     */
-    WOODWORKING ("Woodworking"),
-    
-    /**
-     *  Recipes for working with wool and string to make cloth
-     */
-    CLOTH ("Cloth"), 
-
-    /**
-     * Recipes for food
-     */
-    FOOD ("Food"),
-
-    /**
-     *  Recipes for jewelry
-     */
-    JEWELRY ("Jewelry"),
-
-    /**
-     *  Recipes for exotic/magic items such as blaze powder
-     */
-    EXOTIC ("Exotic"), 
-
-    /**
-     * Recipes for potions
-     */
-    BREWING ("Brewing"),
-
-    /**
-     *  Recipes which do not fall into any other category
-     */
-    MISCELLANEOUS ("Miscellaneous");
-    
-    RecipeCategory(String uiName)
-    {
-      LanguageRegistry.instance().addStringLocalization(getLocalizationId(), uiName);
-    }
-    private String getLocalizationId()
-    {
-      return "UCRecipe." + this.name();
-    }
-    public String getUIName()
-    {
-      return LanguageRegistry.instance().getStringLocalization(getLocalizationId());
-    }
-  }
-    
-  /**
-   * Represents a recipe for a single item. 
-   * @author Cliff
-   *
-   */
-  public class Recipe
-  {
-    private RecipeCategory category;
-    private HashMap<Integer, Integer> recipeItems;
-    private int productItemId;
-    private int productQuantity;
-    
-    public Recipe(RecipeCategory category, int productItemId, int productQuantity)
-    {
-      this.productItemId = productItemId;
-      this.productQuantity = productQuantity;
-      this.recipeItems = new HashMap<Integer, Integer>(5);
-      this.category = category;
-    }    
-    
-    public void addRequirement(int itemId)
-    {    
-      addRequirement(itemId, 1);
-    }
-    
-    public void addRequirement(int itemId, int quantity)
-    {
-      Integer currentCount = recipeItems.get(itemId);
-      if(currentCount == null)
-      {
-        currentCount = quantity;
-      }
-      else
-      {
-        currentCount += quantity;
-      }
-            
-      this.recipeItems.put(itemId, currentCount);
-    }
-    
-    public Map<Integer, Integer> getRecipeItems() { return this.recipeItems; }
-    public RecipeCategory getCategory() { return this.category; }
-    public int getProductItemId() { return this.productItemId; }
-    public int getProductQuantity() { return this.productQuantity; }
-  }
-  
   private static final RecipeCategory defaultCategory = RecipeCategory.MISCELLANEOUS;
   private HashMap<String, RecipeCategory> defaultCreativeTabCategoryMappings;
-  private HashMap<RecipeCategory, ArrayList<Recipe>> allRecipes;
+  private HashMap<RecipeCategory, Set<Recipe>> allRecipes;
   private RecipeConfig recipeConfig;
-    
+  
   public UltracraftRecipes(RecipeConfig config)
   {
-    this.allRecipes = new HashMap<RecipeCategory, ArrayList<Recipe>>();
+    this.allRecipes = new HashMap();
     this.defaultCreativeTabCategoryMappings = new HashMap<String, RecipeCategory>()
     {
       { 
@@ -162,6 +41,16 @@ public class UltracraftRecipes
     };
 
     this.recipeConfig = config;
+  }
+    
+  /**
+   * Returns the set of all known recipes in this category.
+   * @param category The category
+   * @return A set of recipes
+   */
+  public Set<Recipe> getAllRecipesForCategory(RecipeCategory category)
+  {
+    return this.allRecipes.get(category);
   }
   
   public void updateRecipeMappings()
@@ -250,10 +139,10 @@ public class UltracraftRecipes
   
   private void addRecipe(Recipe recipe)
   {
-    ArrayList<Recipe> recipesForTab = this.allRecipes.get(recipe.getCategory());
+    Set<Recipe> recipesForTab = this.allRecipes.get(recipe.getCategory());
     if(recipesForTab == null)
     {
-      recipesForTab = new ArrayList<Recipe>();
+      recipesForTab = new HashSet<Recipe>();
       this.allRecipes.put(recipe.getCategory(), recipesForTab);
     }
     

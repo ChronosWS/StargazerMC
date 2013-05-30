@@ -21,8 +21,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import chronosws.minecraft.ultracraft.Ultracraft;
 import chronosws.minecraft.ultracraft.blocks.MulticraftMachine;
-import chronosws.minecraft.ultracraft.blocks.UltracraftRecipes.RecipeCategory;
 import chronosws.minecraft.ultracraft.common.CommonContainer;
+import chronosws.minecraft.ultracraft.recipes.RecipeCategory;
 
 @SideOnly(Side.CLIENT)
 public class UltracraftingGuiContainer extends CommonGuiContainer
@@ -31,14 +31,12 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
   {
     public Point categoryLocation;
     public ItemStack itemStack;
-    public int machineBlockId;
     public List<MulticraftMachine> supportingMachines;
     
     public CategoryInfo(Point location, ItemStack stack)
     {
       this.categoryLocation = location;
       this.itemStack = stack;
-      this.machineBlockId = 0;
       this.supportingMachines = new ArrayList();
     }
     
@@ -308,7 +306,7 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
           if(machineEntity != null && machineEntity instanceof MulticraftMachine)
           {
             MulticraftMachine machine = (MulticraftMachine)machineEntity;
-            for(RecipeCategory category : machine.supportedCategories())
+            for(RecipeCategory category : machine.getSupportedCategories())
             {
               this.categoryInfos.get(category).supportingMachines.add(machine);
             }                          

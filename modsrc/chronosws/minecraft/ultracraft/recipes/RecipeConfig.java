@@ -1,8 +1,7 @@
-package chronosws.minecraft.ultracraft.blocks;
+package chronosws.minecraft.ultracraft.recipes;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import chronosws.minecraft.ultracraft.blocks.UltracraftRecipes.RecipeCategory;
 import chronosws.minecraft.ultracraft.utilities.Config.CfgSource;
 
 @CfgSource(file="Recipes")
