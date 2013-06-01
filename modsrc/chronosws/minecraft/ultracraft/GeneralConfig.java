@@ -10,8 +10,8 @@ import chronosws.minecraft.ultracraft.utilities.Config.CfgVal;
 public class GeneralConfig
 {
   @CfgBlock public int ucTableId = 500;
+  @CfgBlock public int mcMachineId = 501;
   @CfgItem  public int genericItemId = 5000;
-  @CfgItem  public int itemPickaxeId = 5001;
   
   
   @CfgDesc(desc="The radius in which to search for machines to support the multicrafter")

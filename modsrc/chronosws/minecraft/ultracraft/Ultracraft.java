@@ -10,6 +10,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import chronosws.minecraft.ultracraft.blocks.MulticraftMachineBlock;
+import chronosws.minecraft.ultracraft.blocks.MulticraftMachineItemBlock;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
 import chronosws.minecraft.ultracraft.client.UltracraftingContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
@@ -51,6 +53,7 @@ public class Ultracraft
   //
   public static Item  genericItem;
   public static Block ucTable;
+  public static Block mcMachine;
 
   // The instance of your mod that Forge uses.
   @Instance(ID)
@@ -105,6 +108,14 @@ public class Ultracraft
   // Initialize blocks
   private void initBlocks()
   {
+    mcMachine = new MulticraftMachineBlock(generalConfig.mcMachineId, Material.wood)
+      .setHardness(2.5F)
+      .setStepSound(Block.soundWoodFootstep)
+      .setUnlocalizedName(MulticraftMachineBlock.unlocalizedName)
+      .setCreativeTab(CreativeTabs.tabDecorations);
+    GameRegistry.registerBlock(mcMachine, MulticraftMachineItemBlock.class, mcMachine.getUnlocalizedName());
+    MinecraftForge.setBlockHarvestLevel(mcMachine, "axe", 0);
+    
     ucTable = new UltraCraftingTable(generalConfig.ucTableId, Material.wood)
       .setHardness(2.5F)
       .setStepSound(Block.soundWoodFootstep)
@@ -155,6 +166,7 @@ public class Ultracraft
   {
     LanguageRegistry.addName(genericItem, "Generic Item");
     LanguageRegistry.addName(ucTable, "Ultracrafting Table");
+    LanguageRegistry.addName(mcMachine, "Multicrafting Machine");
   }
 
   // Initialize all crafting recipes for this mod.
@@ -182,6 +194,7 @@ public class Ultracraft
     // TODO: Tie this in more closely with the block declarations so we can 
     //       get the container impls.
     this.guis.put("UltraCraftingTableGui", new UltracraftingContainerInfo());
+    this.guis.put("MulticraftMachineGui", new CommonContainerInfo("", 0, 0, 0, 0));
     
     //
     // Register any special handlers
