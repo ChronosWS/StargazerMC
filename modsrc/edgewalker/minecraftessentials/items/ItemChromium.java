@@ -19,4 +19,10 @@ public class ItemChromium extends Item
 	{
 		itemIcon = iconRegister.registerIcon("MinecraftEssentials:chromium");
 	}
+	
+	// Adds text to the item tooltip
+  public String addInformation()
+  {
+    return "Add to Iron Ore and Charcoal to make Steel";
+  }
 }

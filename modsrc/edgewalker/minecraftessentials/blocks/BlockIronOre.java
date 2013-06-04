@@ -74,13 +74,17 @@ public class BlockIronOre extends Block
   @Override
   public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortuneLvl)
   {
-    // Get the default drops (which is just the block itself)
-    //ArrayList<ItemStack> ret = super.getBlockDropped(world, x, y, z, metadata, fortuneLvl);
-    
     ArrayList<ItemStack> itemsDropped = new ArrayList<ItemStack>();
           
     // Drop 1-3 ore items upon breaking, with 1 additional drop for each level of fortune the player has on tool
     itemsDropped.add(new ItemStack(MinecraftEssentials.itemIronOre.itemID, world.rand.nextInt(3) + fortuneLvl + 1, 0));
+    
+    // In addition, there's a 20% chance that the block will drop chromium, which is used to make steel
+    // fortune adds an additional 10% chance per level that chromium will drop.
+    if(world.rand.nextInt(10)+fortuneLvl>=8)
+    {
+      itemsDropped.add(new ItemStack(MinecraftEssentials.itemChromium.itemID,1,0));    
+    }
     
     return itemsDropped;
   }  
