@@ -17,6 +17,7 @@ public class ItemIronOre extends Item
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 		this.setUnlocalizedName("Iron Ore");
 	}
+
 		
 	public void registerIcons(IconRegister iconRegister)
 	{
