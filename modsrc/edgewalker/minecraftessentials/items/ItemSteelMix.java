@@ -8,25 +8,24 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemChromium extends Item 
+public class ItemSteelMix extends Item 
 {
-	public ItemChromium(int itemId) 
+	public ItemSteelMix(int itemId) 
 	{
 		super(itemId);		
 		this.maxStackSize = 64;
 		this.setCreativeTab(CreativeTabs.tabMaterials);
-		this.setUnlocalizedName("Chromium");
+		this.setUnlocalizedName("Steel Mix");
 	}
 		
-	public void registerIcons(IconRegister iconRegister)
-	{
-		itemIcon = iconRegister.registerIcon("MinecraftEssentials:chromium");
-	}
-	
-	// Adds text to the item tooltip
-  
   public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-      par3List.add("Mix with iron and charcoal to make steel");
+      par3List.add("Smelts into steel ingots");
   }
+    
+	
+	public void registerIcons(IconRegister iconRegister)
+	{
+		itemIcon = iconRegister.registerIcon("MinecraftEssentials:steelMix");
+	}
 }

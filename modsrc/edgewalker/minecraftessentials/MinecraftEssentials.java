@@ -44,6 +44,7 @@ public class MinecraftEssentials
   public static Item itemCopperIngot;
   public static Item itemSteelIngot;
   public static Item itemSilverIngot;
+  public static Item itemSteelMix;
   
   // Ores
   public static Block blockCopperOre;
@@ -80,11 +81,14 @@ public class MinecraftEssentials
   
   private void initRecipes()
   {
+    
+    
+    GameRegistry.addShapelessRecipe(new ItemStack(itemSteelMix), new ItemStack(itemIronOre), new ItemStack(itemChromium), new ItemStack(Item.coal,1,1));
 	  GameRegistry.addSmelting(itemIronOre.itemID, new ItemStack(Item.ingotIron), 1.0f);
 	  GameRegistry.addSmelting(itemGoldOre.itemID, new ItemStack(Item.ingotGold), 1.0f);
 	  GameRegistry.addSmelting(itemCopperOre.itemID, new ItemStack(this.itemCopperIngot), 1.0f);
 	  GameRegistry.addSmelting(itemSilverOre.itemID, new ItemStack(this.itemSilverIngot), 1.0f);
-	  
+	  GameRegistry.addSmelting(itemSteelMix.itemID, new ItemStack(this.itemSteelIngot), 1.0f);
   }
 
 @PostInit
@@ -112,6 +116,7 @@ public class MinecraftEssentials
     LanguageRegistry.addName(itemSteelIngot, "Stainless Steel Ingot");
     LanguageRegistry.addName(itemCopperIngot, "Copper Ingot");
     LanguageRegistry.addName(itemSilverIngot, "Silver Ingot");
+    LanguageRegistry.addName(itemSteelMix, "Steel Mix");
     
     
     // Block Names
@@ -196,6 +201,7 @@ public class MinecraftEssentials
 	  itemCopperIngot = new ItemCopperIngot(4006);
 	  itemSteelIngot = new ItemSteelIngot(4007);
 	  itemSilverIngot = new ItemSilverIngot(4008);
+	  itemSteelMix = new ItemSteelMix(4009);
   }
   
 
