@@ -2,6 +2,7 @@ package stargazer.minecraft.samples.blockwithdrops;
 
 import java.util.ArrayList;
 import java.util.Random;
+import stargazer.minecraft.samples.common.BlockSide;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -12,37 +13,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class SampleBlock extends Block
-{
-  /**
-   * The index for icons representing the bottom of the block.
-   */
-  public static final int Bottom = 0;
-
-  /**
-   * The index for icons representing the top of the block.
-   */
-  public static final int Top = 1;    
-  
-  /**
-   * The index for icons representing the north side of the block.
-   */
-  public static final int North = 2;
-  
-  /**
-   * The index for icons representing the south side of the block.
-   */
-  public static final int South = 3;
-  
-  /**
-   * The index for icons representing the west side of the block.
-   */
-  public static final int West = 4;
-
-  /**
-   * The index for icons representing the east side of the block.
-   */
-  public static final int East = 5;
-  
+{  
   /**
    * An array of icons representing each side of the block.
    */
@@ -88,12 +59,12 @@ public class SampleBlock extends Block
     // means: retrieve the texture from /mods/SampleBreakableBlock/textures/blocks/top.png
     // and make an icon out of it.  We then store this in the array indexed by 
     // side so that we can return it to the renderer, when getIcon() is called.
-    this.icons[Top] = iconRegister.registerIcon(SampleMod.ID + ":top");
-    this.icons[Bottom] = iconRegister.registerIcon(SampleMod.ID + ":bottom");
-    this.icons[North] = iconRegister.registerIcon(SampleMod.ID + ":north");
-    this.icons[South] = iconRegister.registerIcon(SampleMod.ID + ":south");
-    this.icons[East] = iconRegister.registerIcon(SampleMod.ID + ":east");
-    this.icons[West] = iconRegister.registerIcon(SampleMod.ID + ":west");
+    this.icons[BlockSide.TOP.sideIndex] = iconRegister.registerIcon(SampleMod.ID + ":top");
+    this.icons[BlockSide.BOTTOM.sideIndex] = iconRegister.registerIcon(SampleMod.ID + ":bottom");
+    this.icons[BlockSide.NORTH.sideIndex] = iconRegister.registerIcon(SampleMod.ID + ":north");
+    this.icons[BlockSide.SOUTH.sideIndex] = iconRegister.registerIcon(SampleMod.ID + ":south");
+    this.icons[BlockSide.EAST.sideIndex] = iconRegister.registerIcon(SampleMod.ID + ":east");
+    this.icons[BlockSide.WEST.sideIndex] = iconRegister.registerIcon(SampleMod.ID + ":west");
   }
 
   /**

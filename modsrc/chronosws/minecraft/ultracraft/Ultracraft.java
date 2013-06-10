@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import chronosws.minecraft.ultracraft.blocks.MulticraftMachineBlock;
 import chronosws.minecraft.ultracraft.blocks.MulticraftMachineItemBlock;
+import chronosws.minecraft.ultracraft.blocks.MulticraftMachineTileEntity;
+import chronosws.minecraft.ultracraft.blocks.MulticraftingTableTileEntity;
 import chronosws.minecraft.ultracraft.blocks.UltraCraftingTable;
 import chronosws.minecraft.ultracraft.client.UltracraftingContainerInfo;
 import chronosws.minecraft.ultracraft.common.CommonContainerInfo;
@@ -184,7 +186,9 @@ public class Ultracraft
   
   private void initTileEntities()
   {    
-    GameRegistry.registerTileEntity(CommonTileEntityWithInventory.class, CommonTileEntityWithInventory.ENTITY_ID);
+    GameRegistry.registerTileEntity(CommonTileEntityWithInventory.class, CommonTileEntityWithInventory.class.getName());
+    GameRegistry.registerTileEntity(MulticraftingTableTileEntity.class, MulticraftingTableTileEntity.class.getName());
+    GameRegistry.registerTileEntity(MulticraftMachineTileEntity.class, MulticraftMachineTileEntity.class.getName());
   }
   
   private void initGuis()

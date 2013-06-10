@@ -19,7 +19,8 @@ public class UltracraftRecipes
   private static final RecipeCategory defaultCategory = RecipeCategory.MISCELLANEOUS;
   private HashMap<String, RecipeCategory> defaultCreativeTabCategoryMappings;
   private HashMap<RecipeCategory, Set<Recipe>> allRecipes;
-  private RecipeConfig recipeConfig;
+  private RecipeConfig recipeConfig;  
+  private static final Set<Recipe> emptyRecipes = new HashSet();
   
   public UltracraftRecipes(RecipeConfig config)
   {
@@ -50,7 +51,13 @@ public class UltracraftRecipes
    */
   public Set<Recipe> getAllRecipesForCategory(RecipeCategory category)
   {
-    return this.allRecipes.get(category);
+    Set<Recipe> recipesForCategory = this.allRecipes.get(category);
+    if(recipesForCategory == null)
+    {            
+      recipesForCategory = emptyRecipes; 
+    }
+    
+    return recipesForCategory;
   }
   
   public void updateRecipeMappings()

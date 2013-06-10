@@ -25,7 +25,11 @@ public class MulticraftMachineTileEntity extends CommonTileEntityWithInventory
   {
     if(categories.isEmpty())
     {
-      categories.add(RecipeCategory.getCategoryForBlockMetadata(getBlockMetadata()));
+      RecipeCategory metadataCategory = RecipeCategory.getCategoryForBlockMetadata(getBlockMetadata());
+      if(metadataCategory != null)
+      {         
+        categories.add(RecipeCategory.getCategoryForBlockMetadata(getBlockMetadata()));
+      }
     }
     
     return this.categories;

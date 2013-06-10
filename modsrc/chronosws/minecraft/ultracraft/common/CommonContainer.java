@@ -154,4 +154,9 @@ public class CommonContainer extends Container
 
     return stack;
   }
+  
+  public void addItemStack(ItemStack itemStack)
+  {
+    this.mergeItemStack(itemStack, 0, this.playerHotBarFirst, true);
+  }
 }

@@ -3,7 +3,10 @@ package chronosws.minecraft.ultracraft.client;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSlider;
@@ -19,9 +22,11 @@ import org.lwjgl.util.Point;
 import org.lwjgl.util.Rectangle;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import chronosws.minecraft.ultracraft.Constants;
 import chronosws.minecraft.ultracraft.Ultracraft;
 import chronosws.minecraft.ultracraft.blocks.MulticraftMachine;
 import chronosws.minecraft.ultracraft.common.CommonContainer;
+import chronosws.minecraft.ultracraft.recipes.Recipe;
 import chronosws.minecraft.ultracraft.recipes.RecipeCategory;
 
 @SideOnly(Side.CLIENT)
@@ -29,34 +34,52 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
 {  
   private class CategoryInfo
   {
+    public RecipeCategory category;
     public Point categoryLocation;
     public ItemStack itemStack;
     public List<MulticraftMachine> supportingMachines;
+    public HashSet<Recipe> recipes;
     
-    public CategoryInfo(Point location, ItemStack stack)
+    public CategoryInfo(RecipeCategory category, Point location, ItemStack stack)
     {
+      this.category = category;
       this.categoryLocation = location;
       this.itemStack = stack;
       this.supportingMachines = new ArrayList();
+      this.recipes = new HashSet();
     }
     
     public boolean isAvailable()
     {
       return !this.supportingMachines.isEmpty();
     }
+    
+    public void addRecipe(Recipe recipe)
+    {
+      recipes.add(recipe);
+    }
+    
+    public Set<Recipe> getRecipes()
+    {
+      return this.recipes;
+    }
   };
   
-  private HashMap<RecipeCategory, CategoryInfo> categoryInfos;    
+  private HashMap<RecipeCategory, CategoryInfo> categoryInfos; 
+  private HashMap<ButtonControl, CategoryInfo> buttonMap;
   private RecipeCategory selectedCategory;  
   private RecipeCategory hoverCategory;
   private UltracraftingContainerInfo containerInfo;
   private int machineSearchRadius;
+  private Recipe selectedRecipe;
+  private int firstRecipeIndex;
   
   public UltracraftingGuiContainer(CommonContainer container)
   {
     super(container);
     this.containerInfo = (UltracraftingContainerInfo) container.getGuiInfo();    
     this.categoryInfos = new HashMap();
+    this.buttonMap = new HashMap();
     this.machineSearchRadius = Ultracraft.generalConfig.multicraftSearchRadius;          
     this.selectedCategory = RecipeCategory.TOOLS;
   }
@@ -99,7 +122,7 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
     int categoryIndex = 2;
     for(RecipeCategory category : RecipeCategory.values())
     {
-      this.categoryInfos.put(category, new CategoryInfo(getCategoryLocation(categoryIndex), categoryItems.get(category)));
+      this.categoryInfos.put(category, new CategoryInfo(category, getCategoryLocation(categoryIndex), categoryItems.get(category)));
       
       categoryIndex++;
     }
@@ -111,6 +134,7 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
       Point pt = info.categoryLocation;
       ButtonControl button = new ButtonControl(categoryIndex, pt.getX(), pt.getY(), 20, 20, info.itemStack);
       button.enabled = info.isAvailable();
+      this.buttonMap.put(button, info);
       super.buttonList.add(button);            
     }
   }
@@ -118,6 +142,14 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
   @Override
   protected void actionPerformed(GuiButton button)
   {    
+    if(button instanceof ButtonControl)
+    {
+      CategoryInfo info = this.buttonMap.get(button);
+      if(info != null)
+      {
+        selectCategory(info.category);
+      }
+    }
   }
   
   @Override
@@ -136,30 +168,66 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
   /**
    * Handles mouse input.
    */
-  @Override
-  public void handleMouseInput()
-  {
-      int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
-      int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-      
-      this.hoverCategory = getHoverCategory(mouseX, mouseY);
-      super.handleMouseInput();
+//  
+//  @Override
+//  public void handleMouseInput()
+//  {
+//      int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+//      int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+//      
+//      this.hoverCategory = getHoverCategory(mouseX, mouseY);
+//      super.handleMouseInput();
+//  }
+
+  
+//  @Override
+//  protected void mouseMovedOrUp(int x, int y, int mouseEventType)
+//  {
+//    if(mouseEventType != MOUSE_EVENT_MOVE)
+//    {
+//      if(this.hoverCategory != null && this.categoryInfos.get(this.hoverCategory).isAvailable())
+//      {
+//        this.selectedCategory = this.hoverCategory;
+//      }
+//    }
+//    
+//    super.mouseMovedOrUp(x, y, mouseEventType);
+//  }
+//  
+  /**
+   * Changes the inventory to the recipes from the selected category
+   * @param category
+   */
+  private void selectCategory(RecipeCategory category)
+  {     
+    this.selectedCategory = category;
+    this.firstRecipeIndex = 0;
+    updateAvailableRecipes();
   }
 
-  @Override
-  protected void mouseMovedOrUp(int x, int y, int mouseEventType)
+  private static final int RECIPE_SLOTS = 45;
+  private void updateAvailableRecipes()
   {
-    if(mouseEventType != MOUSE_EVENT_MOVE)
-    {
-      if(this.hoverCategory != null && this.categoryInfos.get(this.hoverCategory).isAvailable())
-      {
-        this.selectedCategory = this.hoverCategory;
-      }
-    }
+    CategoryInfo info = this.categoryInfos.get(this.selectedCategory);
     
-    super.mouseMovedOrUp(x, y, mouseEventType);
+    Iterator<Recipe> recipeIterator = info.recipes.iterator();
+    for(int i = this.firstRecipeIndex; i < RECIPE_SLOTS; i++)
+    {
+      // Gather the set of recipes for the currently selected category.
+      if(!recipeIterator.hasNext())      
+      {
+        super.outerContainer.putStackInSlot(1, null);        
+      }
+      else        
+      {
+        Recipe recipe = recipeIterator.next();
+        ItemStack recipeOutput = new ItemStack(Item.itemsList[recipe.getProductItemId()], recipe.getProductQuantity());
+        super.outerContainer.addItemStack(recipeOutput);
+        //super.outerContainer.putStackInSlot(i, new ItemStack(Item.itemsList[recipe.getProductItemId()], recipe.getProductQuantity()));
+      }
+    }    
   }
-  
+
   private RecipeCategory getHoverCategory(int mouseX, int mouseY)
   {
     for(RecipeCategory category : RecipeCategory.values())
@@ -306,10 +374,24 @@ public class UltracraftingGuiContainer extends CommonGuiContainer
           if(machineEntity != null && machineEntity instanceof MulticraftMachine)
           {
             MulticraftMachine machine = (MulticraftMachine)machineEntity;
+            
+            // Add recipes from fully supported categories
             for(RecipeCategory category : machine.getSupportedCategories())
+            { 
+              CategoryInfo info = this.categoryInfos.get(category);
+              info.supportingMachines.add(machine);
+              info.recipes.addAll(Ultracraft.recipes.getAllRecipesForCategory(category));
+            }   
+            
+            // Add individually-supported recipes.
+            for(RecipeCategory category : RecipeCategory.values())
             {
-              this.categoryInfos.get(category).supportingMachines.add(machine);
-            }                          
+              CategoryInfo info = this.categoryInfos.get(category);
+              for(Recipe recipe : machine.getSupportedRecipesForCategory(category))
+              {
+                info.recipes.add(recipe);
+              }
+            }
           }
         }
       }

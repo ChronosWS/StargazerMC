@@ -49,6 +49,8 @@ public class CommonGuiContainer extends GuiContainer
   @Override
   protected void drawGuiContainerForegroundLayer(int x, int y)
   { 
+    super.drawGuiContainerForegroundLayer(x,  y);
+    
     //draw text and stuff here
     //the parameters for drawString are: string, x, y, color
     fontRenderer.drawString("Ultracraft", 8, 6, 4210752);
@@ -58,7 +60,7 @@ public class CommonGuiContainer extends GuiContainer
   
   @Override
   protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
-  {
+  {    
     //draw your Gui here, only thing you need to change is the path
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     this.mc.renderEngine.bindTexture(outerContainer.getGuiInfo().getBackgroundTexture());
@@ -74,13 +76,13 @@ public class CommonGuiContainer extends GuiContainer
   @Override
   public void drawScreen(int par1, int par2, float par3)
   {
+    super.drawScreen(par1, par2, par3);
+
     for (int k = 0; k < this.buttonList.size(); ++k)
     {
         GuiButton guibutton = (GuiButton)this.buttonList.get(k);
         guibutton.drawButton(this.mc, par1, par2);
-    }
-    
-    super.drawScreen(par1, par2, par3);
+    }    
   }
 
   /**
